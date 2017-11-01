@@ -9,7 +9,7 @@
   $alamat = $_POST['alamat'];
 
   $temp = explode(" ", $alamat);
-,jjkh
+
   $tanggal = $_POST['tanggal'];
   $no_hp = $_POST['no_hp'];
   $email = $_POST['email'];

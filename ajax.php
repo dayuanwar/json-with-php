@@ -1,7 +1,6 @@
 <?php
   require_once('../controllers/class.CtrlGlobal.php');
   $objCtrl = new CtrlGlobal();
-  gfg
 
   $type = $_GET['type'];
   $nik = $_GET['nik'];
