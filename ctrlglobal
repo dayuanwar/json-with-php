@@ -1,0 +1,64 @@
+function agenMailer($email, $name, $message) {
+  		// Menambahkan atau menginclude auto load PHPMailer
+  		require 'phpmailer/PHPMailerAutoload.php';
+  		// Membuat instance PHPMailer
+  		$mail = new PHPMailer;
+  		// Checking penggunaan SMTP
+  		$mail->isSMTP();
+  		// Mengaktifkan mode debugging PHPMailer
+  		// 0 = untuk Production
+  		// 1 = Pesan yang ditampilkan untuk sistem client
+  		// 2 = Pesan yang ditampilkan mencakup sistem php dan juga kesalahan konfigurasi
+  		// $mail->SMTPDebug = 2;
+  		// HTML debugging (Hapus jika berada di Production server)
+  		// $mail->Debugoutput = 'html';
+  		// Setting hostname, bisa juga menggunakan Ip Address Shared Hosting Pembaca
+  		$mail->Host = "mail.rumahkoding.net";
+  		// Port yang dipakai, Umumnya 25
+  		$mail->Port = 587;
+  		// Autentifikasi SMTP
+  		$mail->SMTPAuth = true;
+  		// Username akun email yang berada di host
+  		$mail->Username = "pelayanan@rumahkoding.net";
+  		// Password akun email yang berada host
+  		$mail->Password = "pelayanan123#";
+  		// Set konfigurasi email berasal. (Akan ditampilkan di email masuk pengguna)
+  		$mail->setFrom('pelayanan@rumahkoding.net', 'Pelayanan');
+  		// Set alternatif untuk reply-to (Ditampilkan di email masuk pengguna)
+  		// $mail->addReplyTo('info@fintag.id', 'Fintag Maritim');
+  		// Set alamat email yang akan dikirim (Diambil secara dinamis melalui PHP. Sesuaikan !)
+  		$mail->addAddress($email, $name);
+  		// Subject
+  		$mail->Subject = 'ADMIN PELAYANAN';
+  		// Template body email yang akan dikirim
+  		$mail->msgHTML($message);
+
+  		// Siap kirim !
+  		if (!$mail->send()) {
+  			echo "Gagal !". $mail->ErrorInfo;
+  		} else {
+  			//echo "Email Terkirim";
+  		}
+  	}
+
+    function genNoRegistrasi(){
+      global $cfg;
+      $objDB = new Database();
+      try {
+          $query="SELECT MAX(SUBSTR(no_registration, -4, 4)) AS max_id FROM registration";
+          //call select methods to retreive max id Order 00001
+          $data=$objDB->select($query);
+          foreach($data as $item):
+              $xid=$item['max_id'];
+              if(!isset($item['max_id'])) {
+                 $maxid= date('ymd').'-'.'0001';
+              }else{
+                 $maxid = date('ymd').'-'.str_pad($item['max_id']+1, 4, "0", STR_PAD_LEFT) ;
+              }
+          endforeach;
+      } catch (Exception $e) {
+          echo "Query failure" . NL;
+          echo $e->getMessage();
+      }
+      return $maxid;
+    }
